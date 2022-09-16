@@ -1,0 +1,35 @@
+version: '3'
+services:
+  pgdb:
+    container_name: quiz-postgres
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=quotes-app
+      - POSTGRES_USER=dev-user
+      - POSTGRES_PASSWORD=dev-user
+    ports:
+      - "5400:5432"
+    expose:
+      - '5411'
+      # Where our data will be persisted
+    volumes:
+      - postgres-db:/var/lib/postgres
+    networks:
+      - postgres
+# Names our volume
+  pgadmin:
+    container_name: quiz-pgadmin
+    restart: always
+    image: dpage/pgadmin4:latest
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=developer@creativecapsule.com
+      - PGADMIN_DEFAULT_PASSWORD=developer
+    ports:
+      - 9091:80
+    networks:
+      - postgres
+volumes:
+  postgres-db:
+networks:
+  postgres:
