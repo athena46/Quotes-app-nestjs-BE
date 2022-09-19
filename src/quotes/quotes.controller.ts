@@ -12,8 +12,8 @@ export class QuotesController {
   }
 
   @Get(':id')
-  async find(@Param('id') id: any): Promise<Quotes> {
-    return this.quotesService.find(id);
+  async findById(@Param('id') id: number) {
+    return this.quotesService.findByID(id);
   }
 
   @Post()

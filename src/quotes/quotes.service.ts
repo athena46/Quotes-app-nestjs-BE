@@ -1,4 +1,4 @@
-import { Delete, Get, Injectable, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { Delete, Get, HttpException, Injectable, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Quotes } from './quotes.entity';
@@ -15,8 +15,14 @@ export class QuotesService {
   }
 
   @Get(':id')
-  async find(@Param('id') id: any): Promise<Quotes> {
-    return this.quotesRepository.findOne(id);
+  async findByID(id: number): Promise<Quotes> {
+    const data =await this.quotesRepository.findOneBy({id: id});
+    if(!data)
+    {
+      const errors={data: 'Not Found'};
+      throw new HttpException({errors},404);
+    } 
+    return data;
   }
   
   @Post()
